@@ -16,6 +16,7 @@ int[] selectionSort(int[] array)
     return array;
 }
 
+int[] unsortedArray = { 9, 2, 6, 0, 1, 3, 7, 8, 4 };
 int[] sortedArray = selectionSort(unsortedArray);
 
 for (int i = 0; i < sortedArray.Length; i++)
