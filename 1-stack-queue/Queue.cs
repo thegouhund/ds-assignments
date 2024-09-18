@@ -1,105 +1,123 @@
-namespace ConsoleApp1
+namespace Week1
 {
-	public class Queue : Stack
-	{
-		private Node? _last;
-		public Node? last { get => _last; set => _last = value; }
+    public class Queue : LinkedList
+    {
+        public void queue(char value)
+        {
+            Node newNode = new(value);
+            if (First == null)
+            {
+                First = Last = newNode;
+            }
+            else
+            {
+                Last!.next = newNode;
+                newNode.prev = Last;
+                Last = newNode;
+            }
+            Console.WriteLine($"Pushed {value} to queue");
+        }
 
-		public override void push(char value)
-		{
-			Node newNode = new(value);
-			if (first == null)
-			{
-				first = last = newNode;
-			}
-			else
-			{
-				last!.next = newNode;
-				newNode.prev = last;
-				last = newNode;
-			}
-			Console.WriteLine($"Pushed {value} to queue");
-		}
+        public bool hasDequeue()
+        {
+            if (First == null)
+            {
+                return false;
+            }
+            return true;
+        }
 
-		public override void delete(int index)
-		{
-			Node? node = null;
-			Node? current = first;
+        public char? enqueue()
+        {
+            if (hasDequeue())
+            {
+                First = First!.next!;
+                Console.WriteLine("Queue popped");
+                return First.value;
+            }
+            Console.WriteLine("Queue is empty");
+            return null;
+        }
 
-			int count = 0;
-			while (current != null)
-			{
-				if (count == index) node = current;
-				current = current!.next;
-				count++;
+        public void delete(int index)
+        {
+            Node? node = null;
+            Node? current = First;
 
-				if (node != null) break;
-			}
+            int count = 0;
+            while (current != null)
+            {
+                if (count == index) node = current;
+                current = current!.next;
+                count++;
 
-			if (node == null)
-			{
-				Console.WriteLine("Index out of bounds");
-				return;
-			}
+                if (node != null) break;
+            }
 
-			node.prev.next = node.next;
-		}
+            if (node == null)
+            {
+                Console.WriteLine("Index out of bounds");
+                return;
+            }
 
-		public override void swap(int index1, int index2)
-		{
-			if (index1 == index2) return;
-			Console.WriteLine($"Swapping index-{index1} with index-{index2}");
+            node.prev!.next = node.next;
+        }
 
-			Node? node1 = null, node2 = null;
-			Node current = first;
+        public void swap(int index1, int index2)
+        {
+            if (index1 == index2) return;
+            Console.WriteLine($"Swapping index-{index1} with index-{index2}");
 
-			int count = 0;
-			while (current != null)
-			{
-				if (count == index1) node1 = current;
-				if (count == index2) node2 = current;
-				if (node1 != null && node2 != null) break;
-				current = current.next;
-				count++;
-			}
+            Node? node1 = null, node2 = null;
+            Node current = First!;
 
-			if (node1 == null || node2 == null) { Console.WriteLine("Index out of bounds"); return; }
+            int count = 0;
+            while (current != null)
+            {
+                if (count == index1) node1 = current;
+                if (count == index2) node2 = current;
+                if (node1 != null && node2 != null) break;
+                current = current.next!;
+                count++;
+            }
 
-			if (node1.prev != null)
-			{
-				node1.prev.next = node2;
-			}
-			else
-			{
-				first = node2;
-			}
+            if (node1 == null || node2 == null) { Console.WriteLine("Index out of bounds"); return; }
 
-			if (node2.prev != null)
-			{
-				node2.prev.next = node1;
-			}
-			else
-			{
-				first = node1;
-			}
+            if (node1.prev != null)
+            {
+                node1.prev.next = node2;
+            }
+            else
+            {
+                First = node2;
+            }
 
-			Node tempNext = node1.next;
-			node1.next = node2.next;
-			node2.next = tempNext;
+            if (node2.prev != null)
+            {
+                node2.prev.next = node1;
+            }
+            else
+            {
+                First = node1;
+            }
 
-			Node tempPrev = node1.prev!;
-			node1.prev = node2.prev!;
-			node2.prev = tempPrev;
+            Node tempNext = node1.next!;
+            node1.next = node2.next;
+            node2.next = tempNext;
 
-			if (node1.next != null)
-			{
-				node1.next.prev = node1;
-			}
+            Node tempPrev = node1.prev!;
+            node1.prev = node2.prev!;
+            node2.prev = tempPrev;
 
-			if (node2.next != null)
-			{
-				node2.next.prev = node2;
-			}
-		}
-	}
+            if (node1.next != null)
+            {
+                node1.next.prev = node1;
+            }
+
+            if (node2.next != null)
+            {
+                node2.next.prev = node2;
+            }
+        }
+    }
 }
