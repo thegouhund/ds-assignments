@@ -18,7 +18,6 @@ namespace Week2
                 newNode.Prev = last;
                 last = newNode;
             }
-            Console.WriteLine($"Pushed {value} to queue");
         }
 
         public bool hasEnqueue()
@@ -51,6 +50,89 @@ namespace Week2
                 current = current!.Next!;
             }
             Console.WriteLine();
+        }
+
+        private int getLength()
+        {
+            int count = 0;
+            Node? current = first;
+            while (current != null)
+            {
+                count++;
+                current = current.Next;
+            }
+            return count;
+        }
+
+        public void shuffle()
+        {
+            Random rand = new();
+            int n = getLength();
+            while (n > 1)
+            {
+                int k = rand.Next(n--);
+                Node kNode = getNodeAtIndex(k)!;
+                Node nNode = getNodeAtIndex(n)!;
+                swapNodes(nNode, kNode);
+            }
+        }
+
+        public void partialShuffle(int swapAmount)
+        {
+            Random rng = new Random();
+            int length = getLength();
+
+            for (int i = 0; i < swapAmount; i++)
+            {
+                int j = rng.Next(length);
+                int k = rng.Next(length);
+
+                Node jNode = getNodeAtIndex(j)!;
+                Node kNode = getNodeAtIndex(k)!;
+                swapNodes(jNode, kNode);
+            }
+        }
+
+        public void reverse()
+        {
+            if (first == null) return;
+
+            Node? i = first;
+            while (i != null)
+            {
+                Node min = i;
+                Node? j = i.Next;
+
+                while (j != null)
+                {
+                    if (min.Value < j.Value) min = j;
+                    j = j.Next;
+                }
+
+                if (i.Value != min.Value)
+                {
+                    swapNodes(i, min);
+                    i = min.Next;
+                }
+                else
+                {
+                    i = i.Next;
+                }
+            }
+        }
+
+        private Node? getNodeAtIndex(int index)
+        {
+            Node? current = first;
+            int counter = 0;
+
+            while (counter != index)
+            {
+                current = current!.Next;
+                counter++;
+            }
+
+            return current;
         }
 
         private void swapNodes(Node node1, Node node2)
@@ -94,21 +176,32 @@ namespace Week2
 
         public void sort()
         {
-            for (Node i = first!; i != null; i = i.Next!)
+            if (first == null) return;
+
+            Node? i = first;
+            while (i != null)
             {
                 Node min = i;
+                Node? j = i.Next;
 
-                for (Node j = i.Next!; j != null; j = j.Next!)
+                while (j != null)
                 {
                     if (min.Value > j.Value) min = j;
+                    j = j.Next;
                 }
 
-                if (min != i)
+                if (i.Value != min.Value)
                 {
-                    // nodes wont swap properly ¯\_(ツ)_/¯
-                    int temp = i.Value;
-                    i.Value = min.Value;
-                    min.Value = temp;
+                    printAll();
+                    Console.WriteLine($"Swapping {i.Value} and {min.Value}");
+                    swapNodes(i, min);
+
+                    // Move i to the Next node after min (cause min is at i's last position)
+                    i = min.Next;
+                }
+                else
+                {
+                    i = i.Next;
                 }
             }
         }
