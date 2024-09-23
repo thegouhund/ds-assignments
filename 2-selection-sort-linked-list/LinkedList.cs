@@ -5,7 +5,7 @@ namespace Week2
         Node? first;
         Node? last;
 
-        public void queue(int value)
+        public void enqueue(int value)
         {
             Node newNode = new(value);
             if (first == null)
@@ -20,7 +20,7 @@ namespace Week2
             }
         }
 
-        public bool hasEnqueue()
+        public bool hasDequeue()
         {
             if (first == null)
             {
@@ -29,9 +29,9 @@ namespace Week2
             return true;
         }
 
-        public int? enqueue()
+        public int? dequeue()
         {
-            if (hasEnqueue())
+            if (hasDequeue())
             {
                 first = first!.Next!;
                 Console.WriteLine("List popped");
@@ -97,28 +97,22 @@ namespace Week2
         {
             if (first == null) return;
 
-            Node? i = first;
-            while (i != null)
+            Node? prev = null;
+            Node? current = first;
+            Node? next = null;
+
+            while (current != null)
             {
-                Node min = i;
-                Node? j = i.Next;
-
-                while (j != null)
-                {
-                    if (min.Value < j.Value) min = j;
-                    j = j.Next;
-                }
-
-                if (i.Value != min.Value)
-                {
-                    swapNodes(i, min);
-                    i = min.Next;
-                }
-                else
-                {
-                    i = i.Next;
-                }
+                next = current.Next;
+                current.Next = prev;
+                current.Prev = next;
+                prev = current;
+                current = next;
             }
+
+            // Swap first and last
+            last = first;
+            first = prev;
         }
 
         private Node? getNodeAtIndex(int index)
@@ -178,6 +172,7 @@ namespace Week2
         {
             if (first == null) return;
 
+            int counter = 0;
             Node? i = first;
             while (i != null)
             {
@@ -188,22 +183,21 @@ namespace Week2
                 {
                     if (min.Value > j.Value) min = j;
                     j = j.Next;
+                    counter++;
                 }
 
                 if (i.Value != min.Value)
                 {
-                    printAll();
-                    Console.WriteLine($"Swapping {i.Value} and {min.Value}");
+                    // printAll();
+                    // Console.WriteLine($"Swapping {i.Value} and {min.Value}");
                     swapNodes(i, min);
 
                     // Move i to the Next node after min (cause min is at i's last position)
                     i = min.Next;
                 }
-                else
-                {
-                    i = i.Next;
-                }
+                else i = i.Next;
             }
+            Console.WriteLine(counter);
         }
     }
 }
