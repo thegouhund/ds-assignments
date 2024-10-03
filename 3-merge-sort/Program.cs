@@ -4,15 +4,15 @@ namespace Merge_sort
     {
         static void Main(string[] args)
         {
-            List<int> unsorted = new List<int>();
-            List<int> sorted;
+            int[] unsorted = new int[1000];
+            int[] sorted;
 
             Random random = new Random();
 
             Console.WriteLine("Original array elements:");
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < unsorted.Length; i++)
             {
-                unsorted.Add(random.Next(0, 1000000));
+                unsorted[i] = random.Next(0, 1000);
                 Console.Write(unsorted[i] + " ");
             }
             Console.WriteLine();
@@ -30,22 +30,23 @@ namespace Merge_sort
             Console.WriteLine("Waktu sort: " + watch.Elapsed.TotalMilliseconds + "ms");
         }
 
-        private static List<int> MergeSort(List<int> unsorted)
+        private static int[] MergeSort(int[] unsorted)
         {
-            if (unsorted.Count <= 1)
+            if (unsorted.Length <= 1)
                 return unsorted;
 
-            List<int> left = new List<int>();
-            List<int> right = new List<int>();
+            int middle = unsorted.Length / 2;
 
-            int middle = unsorted.Count / 2;
+            int[] left = new int[middle];
+            int[] right = new int[unsorted.Length - middle];
+
             for (int i = 0; i < middle; i++)
             {
-                left.Add(unsorted[i]);
+                left[i] = unsorted[i];
             }
-            for (int i = middle; i < unsorted.Count; i++)
+            for (int i = middle; i < unsorted.Length; i++)
             {
-                right.Add(unsorted[i]);
+                right[i - middle] = unsorted[i];
             }
 
             left = MergeSort(left);
@@ -54,38 +55,40 @@ namespace Merge_sort
             return Merge(left, right);
         }
 
-        // Method to merge two sorted lists
-        private static List<int> Merge(List<int> left, List<int> right)
+        private static int[] Merge(int[] left, int[] right)
         {
-            List<int> result = new List<int>();
+            int[] result = new int[left.Length + right.Length];
+            int i = 0, j = 0, k = 0;
 
-            while (left.Count > 0 || right.Count > 0)
+            while (i < left.Length && j < right.Length)
             {
-                if (left.Count > 0 && right.Count > 0)
+                if (left[i] <= right[j])
                 {
-                    if (left.First() <= right.First())
-                    {
-                        result.Add(left.First());
-                        left.Remove(left.First());
-                    }
-                    else
-                    {
-                        result.Add(right.First());
-                        right.Remove(right.First());
-                    }
+                    result[k] = left[i];
+                    i++;
                 }
-
-                else if (left.Count > 0)
+                else
                 {
-                    result.Add(left.First());
-                    left.Remove(left.First());
+                    result[k] = right[j];
+                    j++;
                 }
-                else if (right.Count > 0)
-                {
-                    result.Add(right.First());
-                    right.Remove(right.First());
-                }
+                k++;
             }
+
+            while (i < left.Length)
+            {
+                result[k] = left[i];
+                i++;
+                k++;
+            }
+
+            while (j < right.Length)
+            {
+                result[k] = right[j];
+                j++;
+                k++;
+            }
+
             return result;
         }
     }
