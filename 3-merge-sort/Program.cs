@@ -4,7 +4,8 @@ namespace Merge_sort
     {
         static void Main(string[] args)
         {
-            int[] unsorted = new int[1000];
+            int length = 10;
+            int[] unsorted = new int[length];
             int[] sorted;
 
             Random random = new Random();
@@ -12,7 +13,7 @@ namespace Merge_sort
             Console.WriteLine("Original array elements:");
             for (int i = 0; i < unsorted.Length; i++)
             {
-                unsorted[i] = random.Next(0, 1000);
+                unsorted[i] = random.Next(0, length);
                 Console.Write(unsorted[i] + " ");
             }
             Console.WriteLine();
@@ -32,8 +33,7 @@ namespace Merge_sort
 
         private static int[] MergeSort(int[] unsorted)
         {
-            if (unsorted.Length <= 1)
-                return unsorted;
+            if (unsorted.Length <= 1) return unsorted;
 
             int middle = unsorted.Length / 2;
 
