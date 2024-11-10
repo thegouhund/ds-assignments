@@ -24,23 +24,23 @@ class RedBlackTree
     public void Add(int key)
     {
         Node newNode = new Node(key);
-        root = BSTInsert(root, newNode);
+        root = AddRec(root, newNode);
         FixInsert(newNode);
     }
 
-    private Node BSTInsert(Node? root, Node newNode)
+    private Node AddRec(Node? root, Node newNode)
     {
         if (root == null)
             return newNode;
 
         if (newNode.Key < root.Key)
         {
-            root.Left = BSTInsert(root.Left, newNode);
+            root.Left = AddRec(root.Left, newNode);
             root.Left.Parent = root;
         }
         else if (newNode.Key > root.Key)
         {
-            root.Right = BSTInsert(root.Right, newNode);
+            root.Right = AddRec(root.Right, newNode);
             root.Right.Parent = root;
         }
 
@@ -143,6 +143,19 @@ class RedBlackTree
         root!.isRed = false;
     }
 
+    public bool isExist(int key)
+    {
+        return isExistRec(root!, key);
+    }
+
+    private bool isExistRec(Node root, int key)
+    {
+        if (root == null) return false;
+        else if (key == root.Key) return true;
+        else if (key < root.Key) return isExistRec(root.Left, key);
+        else return isExistRec(root.Right, key);
+    }
+
     public void PrintTree()
     {
         PrintTreeRec(root, 0, true);
@@ -190,7 +203,6 @@ class RedBlackTree
         {
             tree.Add(numbers[i]);
         }
-
 
         Console.WriteLine("Tree structure:");
         tree.PrintTree();
