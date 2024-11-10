@@ -19,25 +19,53 @@ class BinarySearchTree
         root = null;
     }
 
-    public void Insert(int key)
-    {
-        root = InsertKey(root!, key);
-    }
-
-    private Node InsertKey(Node root, int key)
+    public bool Add(int key)
     {
         if (root == null)
         {
             root = new Node(key);
-            return root;
+            return true;
         }
+        return InsertKey(root, key);
+    }
+
+    private bool InsertKey(Node root, int key)
+    {
+        if (key == root.Key) return false;
 
         if (key < root.Key)
-            root.Left = InsertKey(root.Left, key);
-        else if (key > root.Key)
-            root.Right = InsertKey(root.Right, key);
+        {
+            if (root.Left == null)
+            {
+                root.Left = new Node(key);
+                return true;
+            }
+            return InsertKey(root.Left, key);
+        }
+        else
+        {
+            if (root.Right == null)
+            {
+                root.Right = new Node(key);
+                return true;
+            }
+            return InsertKey(root.Right, key);
+        }
+    }
 
-        return root;
+    public void Preorder()
+    {
+        PreorderRec(root!);
+    }
+
+    private void PreorderRec(Node root)
+    {
+        if (root != null)
+        {
+            Console.Write(root.Key + " -> ");
+            PreorderRec(root.Left);
+            PreorderRec(root.Right);
+        }
     }
 
     public void Inorder()
@@ -50,24 +78,41 @@ class BinarySearchTree
         if (root != null)
         {
             InorderRec(root.Left);
+            Console.Write(root.Key + " -> ");
             InorderRec(root.Right);
+        }
+    }
+
+    public void Postorder()
+    {
+        PostorderRec(root!);
+    }
+
+    private void PostorderRec(Node root)
+    {
+        if (root != null)
+        {
+            PostorderRec(root.Left);
+            PostorderRec(root.Right);
             Console.Write(root.Key + " -> ");
         }
     }
 
-    public void DeleteKey(int key)
+    public Boolean Remove(int key)
     {
-        root = DeleteRec(root!, key);
+        if (!isExist(key)) return false;
+        root = RemoveRec(root!, key);
+        return true;
     }
 
-    private Node DeleteRec(Node root, int key)
+    private Node RemoveRec(Node root, int key)
     {
         if (root == null) return root!;
 
         if (key < root.Key)
-            root.Left = DeleteRec(root.Left, key);
+            root.Left = RemoveRec(root.Left, key);
         else if (key > root.Key)
-            root.Right = DeleteRec(root.Right, key);
+            root.Right = RemoveRec(root.Right, key);
         else
         {
             if (root.Left == null)
@@ -76,7 +121,7 @@ class BinarySearchTree
                 return root.Left;
 
             root.Key = MinValue(root.Right);
-            root.Right = DeleteRec(root.Right, root.Key);
+            root.Right = RemoveRec(root.Right, root.Key);
         }
 
         return root;
@@ -93,17 +138,17 @@ class BinarySearchTree
         return minv;
     }
 
-    public bool Find(int key)
+    public bool isExist(int key)
     {
-        return FindRec(root!, key);
+        return isExistRec(root!, key);
     }
 
-    private bool FindRec(Node root, int key)
+    private bool isExistRec(Node root, int key)
     {
         if (root == null) return false;
         else if (key == root.Key) return true;
-        else if (key < root.Key) return FindRec(root.Left, key);
-        else return FindRec(root.Right, key);
+        else if (key < root.Key) return isExistRec(root.Left, key);
+        else return isExistRec(root.Right, key);
     }
 
 
@@ -133,16 +178,40 @@ class BinarySearchTree
     public static void Main(string[] args)
     {
         BinarySearchTree tree = new BinarySearchTree();
+        Random random = new Random();
+        int[] numbers = new int[10];
 
-        tree.Insert(8);
-        tree.Insert(5);
-        tree.Insert(2);
-        tree.Insert(9);
-        tree.Insert(10);
-        tree.Insert(4);
-        tree.Insert(3);
-        tree.Insert(1);
-        tree.DeleteKey(5);
+        for (int i = 1; i <= 10; i++)
+        {
+            numbers[i - 1] = i;
+        }
+
+        for (int i = numbers.Length - 1; i > 0; i--)
+        {
+            int j = random.Next(i + 1);
+            int temp = numbers[i];
+            numbers[i] = numbers[j];
+            numbers[j] = temp;
+        }
+
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            tree.Add(numbers[i]);
+        }
+
+        Console.WriteLine("Pre-order traversal: ");
+        tree.Preorder();
+        Console.WriteLine();
+
+        Console.WriteLine("In-order traversal: ");
+        tree.Inorder();
+        Console.WriteLine();
+
+        Console.WriteLine("Post-order traversal: ");
+        tree.Postorder();
+        Console.WriteLine();
+
+        Console.WriteLine();
 
         Console.WriteLine("Tree structure:");
         tree.PrintTree();
