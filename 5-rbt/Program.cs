@@ -47,7 +47,7 @@ class RedBlackTree
         return root;
     }
 
-    private void RotateLeft(Node x)
+    public void RotateLeft(Node x)
     {
         Node y = x.Right;
         x.Right = y.Left;
@@ -68,7 +68,7 @@ class RedBlackTree
         x.Parent = y;
     }
 
-    private void RotateRight(Node x)
+    public void RotateRight(Node x)
     {
         Node y = x.Left;
         x.Left = y.Right;
@@ -156,6 +156,51 @@ class RedBlackTree
         else return isExistRec(root.Right, key);
     }
 
+    public void Preorder()
+    {
+        PreorderRec(root!);
+    }
+
+    private void PreorderRec(Node root)
+    {
+        if (root != null)
+        {
+            Console.Write(root.Key + " -> ");
+            PreorderRec(root.Left);
+            PreorderRec(root.Right);
+        }
+    }
+
+    public void Inorder()
+    {
+        InorderRec(root!);
+    }
+
+    private void InorderRec(Node root)
+    {
+        if (root != null)
+        {
+            InorderRec(root.Left);
+            Console.Write(root.Key + " -> ");
+            InorderRec(root.Right);
+        }
+    }
+
+    public void Postorder()
+    {
+        PostorderRec(root!);
+    }
+
+    private void PostorderRec(Node root)
+    {
+        if (root != null)
+        {
+            PostorderRec(root.Left);
+            PostorderRec(root.Right);
+            Console.Write(root.Key + " -> ");
+        }
+    }
+
     public void PrintTree()
     {
         PrintTreeRec(root, 0, true);
@@ -203,6 +248,20 @@ class RedBlackTree
         {
             tree.Add(numbers[i]);
         }
+
+        Console.WriteLine("Pre-order traversal: ");
+        tree.Preorder();
+        Console.WriteLine();
+
+        Console.WriteLine("In-order traversal: ");
+        tree.Inorder();
+        Console.WriteLine();
+
+        Console.WriteLine("Post-order traversal: ");
+        tree.Postorder();
+        Console.WriteLine();
+
+        Console.WriteLine();
 
         Console.WriteLine("Tree structure:");
         tree.PrintTree();
