@@ -2,7 +2,7 @@ namespace Week1
 {
     public class Queue : LinkedList
     {
-        public void queue(char value)
+        public void enqueue(char value)
         {
             Node newNode = new(value);
             if (First == null)
@@ -27,7 +27,7 @@ namespace Week1
             return true;
         }
 
-        public char? enqueue()
+        public char? dequeue()
         {
             if (hasDequeue())
             {
